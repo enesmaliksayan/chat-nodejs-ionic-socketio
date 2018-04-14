@@ -1,0 +1,16 @@
+{
+  "name": "whatbe",
+  "version": "1.0.0",
+  "description": "whatsapp clone with ionic nodejs socketio etc. - this is backend",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "author": "Enes Malik Sayan",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "socket.io": "^2.1.0"
+  }
+}
