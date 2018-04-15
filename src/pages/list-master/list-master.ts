@@ -28,7 +28,7 @@ export class ListMasterPage {
   ionViewDidLoad() {
     this.connectionG = this.socket.getGroups().subscribe((res: Array<{}>) => {
       this.Group = [];
-
+      this.lobby = [];
       res.forEach(resp => {
         console.log(resp['type'] == 'Multi');
         if (resp['type'] == 'Multi') {

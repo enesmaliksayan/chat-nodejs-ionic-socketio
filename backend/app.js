@@ -120,8 +120,8 @@ app.post('/register', (req, res, next) => {
     User.registerUser(body, (err, user) => {
         if (err) res.status(400).json({ ok: false, err });
         else {
-            Group.findOneAndUpdate({ name: 'Lobby' }, { $push: { users: { userName: user.userName } } }, (err, group) => {
-                res.json({ userName: user.userName });
+            Group.findOneAndUpdate({ name: 'Lobby' }, { $push: { users: { userName: user.userName, _id:user._id } } }, (err, group) => {
+                res.json({ userName: user.userName, id: user._id });
             });
         }
     })
@@ -170,14 +170,17 @@ io.on('connection', (socket) => {
     })
 
     socket.on('join', (id, type) => {
+        console.log(id);
         socket.join(id);
         if (type == 'P2P') {
+            console.log('p2p')
             Group.findOne({ userIds: id }).select('messages').exec((err, messages) => {
                 console.log(err, messages);
                 io.to(id).emit('NMTGFS', messages);
             })
 
         } else {
+            console.log('değil');
             Group.findById(id).select('messages').exec((err, messages) => {
                 io.to(id).emit('NMTGFS', messages);
             })
