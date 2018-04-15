@@ -1,18 +1,48 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ item.name }}</ion-title>
+    <ion-title>{{chat.name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
-  <div class="item-profile" text-center #profilePic [style.background-image]="'url(' + item.profilePic + ')'">
-  </div>
+  <ion-grid>
+    <ion-row *ngFor="let message of messages">
 
-  <div class="item-detail" padding>
-    <h2>{{item.name}}</h2>
-    <p>{{item.about}}</p>
-  </div>
+      <ion-col col-9 *ngIf="message.sender !== me.userName" class="message" [ngClass]="{'my_message': message.sender === me.userName, 'other_message': message.sender !== me.userName}">
+        <span class="user_name">{{ message.sender }}:</span>
+        <br>
+        <span>{{ message.message }}</span>
+        <div class="time">{{message.createdAt | date:'dd.MM hh:MM'}}</div>
+      </ion-col>
+
+      <ion-col offset-3 col-9 *ngIf="message.sender === me.userName" class="message" [ngClass]="{'my_message': message.sender === me.userName, 'other_message': message.sender !== me.userName}">
+        <span class="user_name">{{ message.sender }}:</span>
+        <br>
+        <span>{{ message.message }}</span>
+        <div class="time">{{message.createdAt | date:'dd.MM hh:MM'}}</div>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
 </ion-content>
+
+
+<ion-footer>
+    <ion-toolbar>
+      <ion-row class="message_row">
+        <ion-col col-9>
+          <ion-item no-lines>
+            <ion-input type="text" placeholder="Message" [(ngModel)]="message"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-3>
+          <button ion-button clear color="primary" (click)="sendMessage()" [disabled]="message === ''">
+          Gönder
+        </button>
+        </ion-col>
+      </ion-row>
+    </ion-toolbar>
+  </ion-footer>

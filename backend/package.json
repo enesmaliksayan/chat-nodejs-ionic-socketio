@@ -9,8 +9,16 @@
   "author": "Enes Malik Sayan",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
     "express": "^4.16.3",
+    "express-fileupload": "^0.4.0",
+    "express-session": "^1.15.6",
+    "lodash": "^4.17.5",
+    "mongoose": "^5.0.14",
+    "morgan": "^1.9.0",
     "socket.io": "^2.1.0"
   }
 }

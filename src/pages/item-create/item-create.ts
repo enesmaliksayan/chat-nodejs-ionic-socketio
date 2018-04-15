@@ -1,7 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Camera } from '@ionic-native/camera';
-import { IonicPage, NavController, ViewController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, ViewController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -9,60 +7,45 @@ import { IonicPage, NavController, ViewController } from 'ionic-angular';
   templateUrl: 'item-create.html'
 })
 export class ItemCreatePage {
-  @ViewChild('fileInput') fileInput;
-
-  isReadyToSave: boolean;
 
   item: any;
 
-  form: FormGroup;
+  Users;
+  group = {
+    name: '',
+    users: [],
+    type: "Multi"
+  };
 
-  constructor(public navCtrl: NavController, public viewCtrl: ViewController, formBuilder: FormBuilder, public camera: Camera) {
-    this.form = formBuilder.group({
-      profilePic: [''],
-      name: ['', Validators.required],
-      about: ['']
-    });
+  constructor(public navCtrl: NavController, params: NavParams, public viewCtrl: ViewController) {
 
-    // Watch the form for changes, and
-    this.form.valueChanges.subscribe((v) => {
-      this.isReadyToSave = this.form.valid;
-    });
+    this.Users = params.get('Users');
+
   }
 
   ionViewDidLoad() {
 
   }
 
-  getPicture() {
-    if (Camera['installed']()) {
-      this.camera.getPicture({
-        destinationType: this.camera.DestinationType.DATA_URL,
-        targetWidth: 96,
-        targetHeight: 96
-      }).then((data) => {
-        this.form.patchValue({ 'profilePic': 'data:image/jpg;base64,' + data });
-      }, (err) => {
-        alert('Unable to take photo');
-      })
-    } else {
-      this.fileInput.nativeElement.click();
+  addUser(item) {
+    let exist = -1;
+    this.group.users.forEach((user, index) => {
+      if (user._id == item._id) {
+        exist = index;
+      }
+    })
+    console.log(exist);
+    if (exist == -1) {
+      this.group.users.push(item);
     }
   }
 
-  processWebImage(event) {
-    let reader = new FileReader();
-    reader.onload = (readerEvent) => {
-
-      let imageData = (readerEvent.target as any).result;
-      this.form.patchValue({ 'profilePic': imageData });
-    };
-
-    reader.readAsDataURL(event.target.files[0]);
-  }
-
-  getProfileImageStyle() {
-    return 'url(' + this.form.controls['profilePic'].value + ')'
+  removeUser(item) {
+    this.group.users.forEach((member, index) => {
+      if (member._id == item._id) {
+        this.group.users.splice(index, 1);
+      }
+    })
   }
 
   /**
@@ -77,7 +60,6 @@ export class ItemCreatePage {
    * back to the presenter.
    */
   done() {
-    if (!this.form.valid) { return; }
-    this.viewCtrl.dismiss(this.form.value);
+    this.viewCtrl.dismiss(this.group);
   }
 }
