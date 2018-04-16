@@ -6,8 +6,8 @@ import { Injectable } from '@angular/core';
  */
 @Injectable()
 export class Api {
-  url: string = 'http://localhost:3000';
-
+  //url: string = 'http://localhost:3000';
+  url: string = 'https://socketwhats.herokuapp.com';
   constructor(public http: HttpClient) {
   }
 

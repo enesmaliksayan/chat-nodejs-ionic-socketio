@@ -14,8 +14,8 @@ const _ = require('lodash');
 
 mongoose.connect('mongodb://enesmaliksayan:enesmaliksayan@ds119969.mlab.com:19969/chatclone').then(() => {
     console.log('connected to db');
-}).catch(() => {
-    console.log('error while connection to db.');
+}).catch((e) => {
+    console.log('error while connection to db.', e);
 })
 
 const UserSchema = mongoose.Schema({
@@ -91,7 +91,7 @@ const http = require('http');
 var app = express();
 var server = http.createServer(app);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 const io = socketIO(server);
 
@@ -114,13 +114,17 @@ app.use(session({
     cookie: { maxAge: 60000 * 48 }
 }));
 
+app.get('/', (req, res, next) => {
+    res.send({ ok: true });
+})
+
 app.post('/register', (req, res, next) => {
     let body = req.body;
 
     User.registerUser(body, (err, user) => {
         if (err) res.status(400).json({ ok: false, err });
         else {
-            Group.findOneAndUpdate({ name: 'Lobby' }, { $push: { users: { userName: user.userName, _id:user._id } } }, (err, group) => {
+            Group.findOneAndUpdate({ name: 'Lobby' }, { $push: { users: { userName: user.userName, _id: user._id } } }, (err, group) => {
                 res.json({ userName: user.userName, id: user._id });
             });
         }
@@ -163,7 +167,7 @@ io.on('connection', (socket) => {
         socket.emit('getGroups', groups);
     })
 
-    socket.on('newGroup', () => {
+    socket.on('newGroup', (group) => {
         Group.find().exec((err, groups) => {
             socket.emit('getGroups', groups);
         })

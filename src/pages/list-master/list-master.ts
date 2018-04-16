@@ -72,4 +72,9 @@ export class ListMasterPage {
     })
   }
 
+  ionViewWillLeave() {
+    this.connectionG.unsubscribe();
+    this.connectionU.unsubscribe();
+  }
+
 }

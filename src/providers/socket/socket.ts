@@ -10,7 +10,8 @@ import { User } from '../user/user';
  */
 @Injectable()
 export class Socket {
-  url: string = 'http://localhost:3000/';
+  //url: string = 'http://localhost:3000/';
+  url: string = 'https://socketwhats.herokuapp.com/';
   socket;
 
   constructor(public http: HttpClient, public api: Api, public user: User) {
@@ -28,6 +29,7 @@ export class Socket {
   getGroups() {
     let observable = new Observable((observe: any) => {
       this.socket.on('getGroups', group => {
+        console.log(group);
         observe.next(group);
       });
       return () => {
@@ -81,8 +83,7 @@ export class Socket {
   createMultiUserGroup(group) {
     group.users.push(this.user._user);
     this.api.post('createGroup', group).subscribe(res => {
-      console.log("ree", res);
-      this.socket.emit('newGroup');
+      this.socket.emit('newGroup', group);
     })
   }
 
@@ -101,7 +102,6 @@ export class Socket {
       messages: []
     }
     return this.api.post('createGroup', group).map(res => {
-      this.socket.emit('newGroup');
       if (res['userIds']) {
         console.log("1");
         return res;

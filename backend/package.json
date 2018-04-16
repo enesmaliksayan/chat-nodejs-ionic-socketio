@@ -1,15 +1,18 @@
 {
   "name": "whatbe",
   "version": "1.0.0",
+  "engines": {
+    "node": "8.9.4"
+  },
   "description": "whatsapp clone with ionic nodejs socketio etc. - this is backend",
   "main": "app.js",
   "scripts": {
-    "test": "npm start"
+    "start": "node app.js"
   },
   "author": "Enes Malik Sayan",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "1.0.3",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
